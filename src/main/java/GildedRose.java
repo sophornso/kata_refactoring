@@ -4,7 +4,9 @@ import java.util.List;
 
 public class GildedRose {
 
-	static List<Item> items = null;
+	private List<Item> items;
+	
+	private IUpdateQualityFactory updateQualityFactory = new UpdateQualityFactory();
 
 	/**
 	 * @param args
@@ -12,8 +14,8 @@ public class GildedRose {
 	public static void main(String[] args) {
 		
         System.out.println("OMGHAI!");
-		
-        items = new ArrayList<Item>();
+        
+        List<Item> items = new ArrayList<Item>();
         items.add(new Item("+5 Dexterity Vest", 10, 20));
         items.add(new Item("Aged Brie", 2, 0));
         items.add(new Item("Elixir of the Mongoose", 5, 7));
@@ -21,7 +23,8 @@ public class GildedRose {
         items.add(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
         items.add(new Item("Conjured Mana Cake", 3, 6));
 
-        updateQuality();
+        GildedRose gildedRose = new GildedRose(items);
+        gildedRose.updateQuality();
 }
 
 
@@ -29,13 +32,17 @@ public class GildedRose {
 		this.items = items;
 	}
 	
-	 public static void updateQuality() {
-	     for (int i = 0; i < items.size(); i++) {
-	    	 Item item = items.get(i);
-	    	 IUpdateQuality updateQuality = UpdateQualityFactory.createUpdateQuality(item.name);
+	 public void updateQuality() {
+	     for (Item item : items) {
+	    	 IUpdateQuality updateQuality = updateQualityFactory.createUpdateQuality(item.name);
 	    	 updateQuality.updateQuality(item);
 	     }
 	        
 	 }
+
+
+	public List<Item> getItems() {
+		return items;
+	}
 
 }
