@@ -29,10 +29,12 @@ public class UpdateQualityFactory implements IUpdateQualityFactory {
 
 class StandardUpdateQuality implements IUpdateQuality {
 
+	public final static int QUALITY_DECREASE = 1;
+	
 	@Override
 	public void updateQuality(Item item) {
 		item.setSellIn(item.getSellIn() - 1);
-		int decrease = (item.getSellIn() < 0) ? 2 : 1;
+		int decrease = (item.getSellIn() < 0) ? 2*QUALITY_DECREASE : QUALITY_DECREASE;
 		int newQuality = item.getQuality() - decrease;
 		item.setQuality(newQuality > 0 ? newQuality : 0);
 	}
@@ -88,12 +90,13 @@ class BackstageQuality implements IUpdateQuality {
 
 class ConjuredQuality implements IUpdateQuality {
 
+	public final static int QUALITY_DECREASE = 2*StandardUpdateQuality.QUALITY_DECREASE;
+	
 	@Override
 	public void updateQuality(Item item) {
 		item.setSellIn(item.getSellIn() - 1);
 
-		int decrease = (item.getSellIn() < 0) ? 4 : 2; // Quality is decreased
-														// twice as normal
+		int decrease = (item.getSellIn() < 0) ? 2*QUALITY_DECREASE : QUALITY_DECREASE; // Quality is decreased twice as normal
 		int updatedQuality = item.getQuality() - decrease;
 		item.setQuality(updatedQuality > 0 ? updatedQuality : 0);
 	}

@@ -6,7 +6,7 @@ public class GildedRose {
 
 	private List<Item> items;
 	
-	private IUpdateQualityFactory updateQualityFactory = new UpdateQualityFactory();
+	private IUpdateQualityFactory updateQualityFactory = new UpdateQualityFactory2();
 
 	/**
 	 * @param args
