@@ -1,9 +1,13 @@
-import static org.junit.Assert.*;
+package com.gildedrose;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
 public class GildedRoseTest {
@@ -13,8 +17,7 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void decreaseSellinAndQualityEachDay() {
-		List<Item> items = Arrays.asList(new Item("foo", 10, 20), new Item(
-				"fii", 5, 10));
+		List<Item> items = Arrays.asList(new Item("foo", 10, 20), new Item("fii", 5, 10));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
 		Item foo = app.getItems().get(0);
@@ -26,7 +29,6 @@ public class GildedRoseTest {
 		assertEquals("fii", fii.name);
 		assertEquals(4, fii.getSellIn());
 		assertEquals(9, fii.getQuality());
-
 	}
 
 	/**
@@ -34,8 +36,7 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void onceSellDatePassedQualityDegradeTwice() {
-		List<Item> items = Arrays.asList(new Item("foo", 10, 20), new Item(
-				"sell date passed product", 0, 10));
+		List<Item> items = Arrays.asList(new Item("foo", 10, 20), new Item("sell date passed product", 0, 10));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
 		Item foo = app.getItems().get(0);
@@ -47,7 +48,6 @@ public class GildedRoseTest {
 		assertEquals("sell date passed product", sellDatePassedProduct.name);
 		assertEquals(-1, sellDatePassedProduct.getSellIn());
 		assertEquals(8, sellDatePassedProduct.getQuality());
-
 	}
 
 	/**
@@ -55,8 +55,7 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void qualityIsNeverNegative() {
-		List<Item> items = Arrays.asList(new Item("foo", 10, 0), new Item(
-				"sell date passed product", 0, 0));
+		List<Item> items = Arrays.asList(new Item("foo", 10, 0), new Item("sell date passed product", 0, 0));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
 		Item foo = app.getItems().get(0);
@@ -82,7 +81,6 @@ public class GildedRoseTest {
 		assertEquals("Aged Brie", agedBrie.name);
 		assertEquals(9, agedBrie.getSellIn());
 		assertEquals(6, agedBrie.getQuality());
-
 	}
 
 	/**
@@ -97,7 +95,6 @@ public class GildedRoseTest {
 		assertEquals("Aged Brie", agedBrie.name);
 		assertEquals(9, agedBrie.getSellIn());
 		assertEquals(50, agedBrie.getQuality());
-
 	}
 
 	/**
@@ -106,15 +103,13 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void sulfurasLegendaryItemHasNeverSoldOrDecreaseInQuality() {
-		List<Item> items = Arrays.asList(new Item("Sulfuras, Hand of Ragnaros",
-				0, 80));
+		List<Item> items = Arrays.asList(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
-		Item agedBrie = app.getItems().get(0);
-		assertEquals("Sulfuras, Hand of Ragnaros", agedBrie.name);
-		assertEquals(0, agedBrie.getSellIn());
-		assertEquals(80, agedBrie.getQuality());
-
+		Item sulfuras = app.getItems().get(0);
+		assertTrue(new StringContains("Sulfuras").matches(sulfuras.name));
+		assertEquals(0, sulfuras.getSellIn());
+		assertEquals(80, sulfuras.getQuality());
 	}
 
 	/**
@@ -125,16 +120,13 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void backstageLeft10DaysQualityDecreaseBy2() {
-		List<Item> items = Arrays.asList(new Item(
-				"Backstage passes to a TAFKAL80ETC concert", 10, 40));
+		List<Item> items = Arrays.asList(new Item("Backstage passes to a TAFKAL80ETC concert", 10, 40));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
 		Item backstage = app.getItems().get(0);
-		assertEquals("Backstage passes to a TAFKAL80ETC concert",
-				backstage.name);
+		assertEquals("Backstage passes to a TAFKAL80ETC concert", backstage.name);
 		assertEquals(9, backstage.getSellIn());
 		assertEquals(42, backstage.getQuality());
-
 	}
 
 	/**
@@ -143,15 +135,13 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void backstageLeft5DaysQualityDecreaseBy3() {
-		List<Item> items = Arrays.asList(new Item(
-				"Backstage passes to a TAFKAL80ETC concert", 5, 40));
+		List<Item> items = Arrays.asList(new Item("Backstage passes to a TAFKAL80ETC concert", 5, 40));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
-		Item agedBrie = app.getItems().get(0);
-		assertEquals("Backstage passes to a TAFKAL80ETC concert", agedBrie.name);
-		assertEquals(4, agedBrie.getSellIn());
-		assertEquals(43, agedBrie.getQuality());
-
+		Item backstage = app.getItems().get(0);
+		assertEquals("Backstage passes to a TAFKAL80ETC concert", backstage.name);
+		assertEquals(4, backstage.getSellIn());
+		assertEquals(43, backstage.getQuality());
 	}
 
 	/**
@@ -160,15 +150,13 @@ public class GildedRoseTest {
 	 */
 	@Test
 	public void backstageWithNoMoreDaysDropItsQualityTo0() {
-		List<Item> items = Arrays.asList(new Item(
-				"Backstage passes to a TAFKAL80ETC concert", 0, 40));
+		List<Item> items = Arrays.asList(new Item("Backstage passes to a TAFKAL80ETC concert", 0, 40));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
-		Item agedBrie = app.getItems().get(0);
-		assertEquals("Backstage passes to a TAFKAL80ETC concert", agedBrie.name);
-		assertEquals(-1, agedBrie.getSellIn());
-		assertEquals(0, agedBrie.getQuality());
-
+		Item backstage = app.getItems().get(0);
+		assertEquals("Backstage passes to a TAFKAL80ETC concert", backstage.name);
+		assertEquals(-1, backstage.getSellIn());
+		assertEquals(0, backstage.getQuality());
 	}
 
 	/**
@@ -180,11 +168,10 @@ public class GildedRoseTest {
 		List<Item> items = Arrays.asList(new Item("Conjured Mana Cake", 5, 30));
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
-		Item agedBrie = app.getItems().get(0);
-		assertEquals("Conjured Mana Cake", agedBrie.name);
-		assertEquals(4, agedBrie.getSellIn());
-		assertEquals(28, agedBrie.getQuality());
-
+		Item conjured = app.getItems().get(0);
+		assertEquals("Conjured Mana Cake", conjured.name);
+		assertEquals(4, conjured.getSellIn());
+		assertEquals(28, conjured.getQuality());
 	}
 
 	@Test
@@ -231,4 +218,36 @@ public class GildedRoseTest {
 		assertEquals(2, item.getSellIn());
 		assertEquals(4, item.getQuality()); // Decrease twice as normal items
 	}
+	
+	/**
+	 * Expected IllegalArgumentException when item name is null
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void excpetionIfProductNameIsNull() {
+		List<Item> items = Arrays.asList(new Item(null, 5, 30));
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+	}
+
+	
+	/**
+	 * Expected IllegalStateException when Sulfuras item has its sellIn different to 0
+	 */
+	@Test(expected=IllegalStateException.class)
+	public void SulfurasExceptionWhenSellingDifferentTo0() {
+		List<Item> items = Arrays.asList(new Item("Sulfuras, Hand of Ragnaros", 11, 22));
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+	}
+	
+	/**
+	 * Expected IllegalStateException when Sulfuras item has its quality different to 80
+	 */
+	@Test(expected=IllegalStateException.class)
+	public void SulfurasExceptionWhenQualityDifferentTo80() {
+		List<Item> items = Arrays.asList(new Item("Sulfuras, Hand of Ragnaros", 0, 22));
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+	}
+
 }

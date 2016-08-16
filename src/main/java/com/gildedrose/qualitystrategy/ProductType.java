@@ -1,8 +1,12 @@
+package com.gildedrose.qualitystrategy;
+
+import com.gildedrose.Item;
 
 enum ProductType implements IUpdateQuality {
-	
+
 	STANDARD,
-	AGE_BRIE{
+
+	AGE_BRIE {
 		@Override
 		public void updateQuality(Item item) {
 			item.setSellIn(item.getSellIn() - 1);
@@ -11,20 +15,20 @@ enum ProductType implements IUpdateQuality {
 			}
 		}
 	},
-	SULFURAS{
+
+	SULFURAS {
 		@Override
 		public void updateQuality(Item item) {
 			if (item.getSellIn() != 0) {
-				throw new IllegalStateException(
-						"Sulfaras should have never to be sold");
+				throw new IllegalStateException("Sulfaras should have never to be sold");
 			}
 			if (item.getQuality() != 80) {
-				throw new IllegalStateException(
-						"Sulfaras should have its quality equal to 80, it never alters");
+				throw new IllegalStateException("Sulfaras should have its quality equal to 80, it never alters");
 			}
 		}
 	},
-	BACKSTAGE{
+
+	BACKSTAGE {
 		@Override
 		public void updateQuality(Item item) {
 			item.setSellIn(item.getSellIn() - 1);
@@ -42,57 +46,35 @@ enum ProductType implements IUpdateQuality {
 			}
 		}
 	},
-	CONJURED{
-		
+
+	CONJURED {
+
 		@Override
 		public void updateQuality(Item item) {
 			item.setSellIn(item.getSellIn() - 1);
 
-			int decrease = (item.getSellIn() < 0) ? 2*getQualityDecrementUnit() : getQualityDecrementUnit(); // Quality is decreased twice as normal
+			// Quality is decreased twice as normal
+			int decrease = (item.getSellIn() < 0) ? 2 * getQualityDecrementUnit() : getQualityDecrementUnit();
 			int updatedQuality = item.getQuality() - decrease;
 			item.setQuality(updatedQuality > 0 ? updatedQuality : 0);
 		}
-		
+
 		@Override
 		public int getQualityDecrementUnit() {
-			return 2*STANDARD.getQualityDecrementUnit();
+			return 2 * STANDARD.getQualityDecrementUnit();
 		}
 	};
-	
-	
-	
+
 	public int getQualityDecrementUnit() {
 		return 1;
 	}
-	
+
 	@Override
 	public void updateQuality(Item item) {
 		item.setSellIn(item.getSellIn() - 1);
-		int decrease = (item.getSellIn() < 0) ? 2*getQualityDecrementUnit() : getQualityDecrementUnit();
-		int newQuality = item.getQuality() - decrease;
-		item.setQuality(newQuality > 0 ? newQuality : 0);
+		int decrease = (item.getSellIn() < 0) ? 2 * getQualityDecrementUnit() : getQualityDecrementUnit();
+		int updatedQuality = item.getQuality() - decrease;
+		item.setQuality(updatedQuality > 0 ? updatedQuality : 0);
 	}
-	
-	
-	
-	public static ProductType instanceOf(String productName) {
-		
-		ProductType productType = STANDARD;
-		
-		if (productName.equals("Aged Brie")) {
-			productType = AGE_BRIE;
 
-		} else if (productName.startsWith("Sulfuras")) {
-			productType = SULFURAS;
-
-		} else if (productName.startsWith("Backstage")) {
-			productType = BACKSTAGE;
-
-		} else if (productName.startsWith("Conjured")) {
-			productType = CONJURED;
-		} 
-
-		return productType;
-		
-	}
 }

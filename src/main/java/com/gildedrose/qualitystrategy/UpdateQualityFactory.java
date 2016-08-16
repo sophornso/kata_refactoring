@@ -1,16 +1,30 @@
+package com.gildedrose.qualitystrategy;
 
-public class UpdateQualityFactory2 implements IUpdateQualityFactory {
+public class UpdateQualityFactory implements IUpdateQualityFactory {
 
 	@Override
 	public IUpdateQuality createUpdateQuality(String productName) {
 
 		if (productName == null) {
-			throw new RuntimeException("productName is not provided");
+			throw new IllegalArgumentException("productName is not provided");
 		}
 
-		return ProductType.instanceOf(productName);
+		ProductType productType = ProductType.STANDARD;
+
+		if (productName.equals("Aged Brie")) {
+			productType = ProductType.AGE_BRIE;
+
+		} else if (productName.startsWith("Sulfuras")) {
+			productType = ProductType.SULFURAS;
+
+		} else if (productName.startsWith("Backstage")) {
+			productType = ProductType.BACKSTAGE;
+
+		} else if (productName.startsWith("Conjured")) {
+			productType = ProductType.CONJURED;
+		}
+
+		return productType;
 	}
 
 }
-
-
