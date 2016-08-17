@@ -2,7 +2,7 @@ package com.gildedrose.qualitystrategy;
 
 import com.gildedrose.Item;
 
-enum ProductType implements IUpdateQuality {
+public enum ProductType implements IUpdateQuality {
 
 	STANDARD,
 
