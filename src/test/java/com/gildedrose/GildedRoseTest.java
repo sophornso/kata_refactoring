@@ -10,6 +10,8 @@ import java.util.List;
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
 
+import com.gildedrose.qualitystrategy.ProductType;
+
 public class GildedRoseTest {
 
 	/**
@@ -249,5 +251,141 @@ public class GildedRoseTest {
 		GildedRose app = new GildedRose(items);
 		app.updateQuality();
 	}
+	
+	/**
+	 * Update quality test for standard product when sellin > 0
+	 */
+	@Test
+	public void StandardUpdateQuality() {
+		Item item = new Item("+5 Dexterity Vest", 10, 20);
+		ProductType.STANDARD.updateQuality(item);
+		assertEquals(item.sellIn, 9);
+		assertEquals(item.quality, 19);
+	}
+	
+	/**
+	 * Update quality test for standard product when sellin = 0
+	 */
+	@Test
+	public void StandardUpdateQualityWhenSellInIs0() {
+		Item item = new Item("+5 Dexterity Vest", 0, 20);
+		ProductType.STANDARD.updateQuality(item);
+		assertEquals(item.sellIn, -1);
+		assertEquals(item.quality, 18);
+	}
 
+
+	/**
+	 * Update quality test for Aged Brie
+	 */
+	@Test
+	public void AgedBrieQuality() {
+		Item item = new Item("Aged Brie", 10, 20);
+		ProductType.AGE_BRIE.updateQuality(item);
+		assertEquals(item.sellIn, 9);
+		assertEquals(item.quality, 21);
+	}
+	
+	/**
+	 * Update quality test for Aged Brie when quality reach already 50 
+	 */
+	@Test
+	public void AgedBrieQualityWhenQualityReachAlready50() {
+		Item item = new Item("Aged Brie", 10, 50);
+		ProductType.AGE_BRIE.updateQuality(item);
+		assertEquals(item.sellIn, 9);
+		assertEquals(item.quality, 50);
+	}
+	
+	/**
+	 * Update quality test for Sulfuras when sellin is different to 0
+	 */
+	@Test(expected=IllegalStateException.class)
+	public void SulfurasQualityExceptionIfSellinDifferentTo0() {
+		Item item = new Item("Sulfuras", 10, 20);
+		ProductType.SULFURAS.updateQuality(item);
+	}
+	
+	/**
+	 * Update quality test for Sulfuras when quality is different to 80
+	 */
+	@Test(expected=IllegalStateException.class)
+	public void SulfurasQualityExceptionIfQualityIsDifferentTo80() {
+		Item item = new Item("Sulfuras", 0, 50);
+		ProductType.SULFURAS.updateQuality(item);
+	}
+	
+
+	/**
+	 * Update quality test for Sulfuras when it has its excpected sellin = 0 and quality = 80 values 
+	 */
+	@Test
+	public void SulfurasQualityIsOk() {
+		Item item = new Item("Sulfuras", 0, 80);
+		ProductType.SULFURAS.updateQuality(item);
+		assertEquals(item.sellIn, 0);
+		assertEquals(item.quality, 80);
+	}
+	
+
+	/**
+	 * Update quality test for backstage when sellin > 10 
+	 */
+	@Test
+	public void backStageQualityWhenSellinGreatherThan10() {
+		Item item = new Item("Backstage", 12, 20);
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, 11);
+		assertEquals(item.quality, 21);
+		
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, 10);
+		assertEquals(item.quality, 22);
+	}
+	
+	/**
+	 * Update quality test for backstage when sellin between ]5,10] 
+	 */
+	@Test
+	public void backStageQualityWhenSellinBetween5And10() {
+		Item item = new Item("Backstage", 10, 20);
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, 9);
+		assertEquals(item.quality, 22);
+		
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, 8);
+		assertEquals(item.quality, 24);
+	}
+	
+
+	/**
+	 * Update quality test for backstage when sellin between ]0,5] 
+	 */
+	@Test
+	public void backStageQualityWhenSellinBetween0And5() {
+		Item item = new Item("Backstage", 5, 20);
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, 4);
+		assertEquals(item.quality, 23);
+		
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, 3);
+		assertEquals(item.quality, 26);
+	}
+	
+	/**
+	 * Update quality test for backstage when sellin is 0 
+	 */
+	@Test
+	public void backStageQualityWhenSellinIs0() {
+		Item item = new Item("Backstage", 0, 20);
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, -1);
+		assertEquals(item.quality, 0);
+		
+		ProductType.BACKSTAGE.updateQuality(item);
+		assertEquals(item.sellIn, -2);
+		assertEquals(item.quality, 0);
+	}
 }
